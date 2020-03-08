@@ -4,3 +4,7 @@ Simple expense tracker allowing you to add either income or other expenses. If t
 If it is positive income, it is marked by a green marker and a (+) sign. The total, income and expenses is calculated at the top. The total balance of both is tracked and updated 
 based upon adding new items to the list or removing items from the list.
 
+#Update
+
+Updated to implementing useContext and useReducer hooks for better state management and fixed transaction list to load upon submission
+
