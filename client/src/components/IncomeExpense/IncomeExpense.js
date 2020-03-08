@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import TransactionContext from '../../Context/Transaction/TransactionContext';
 
 import './IncomeExpense.scss';
 
-const IncomeExpense = ({ trans, amount }) => {
+const IncomeExpense = () => {
 
-    const amounts = trans.map(transaction => transaction.amount);
+    const transactionContext = useContext(TransactionContext);
+    const { transaction } = transactionContext;
+
+    const amounts = transaction.map(transactions => transactions.amount);
 
     const income = amounts.filter(item => item > 0).reduce((acc, item) => (acc += item), 0)
         .toFixed(2);

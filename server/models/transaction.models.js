@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const TransactionSchema = new mongoose.Schema({
-    transaction: { type: String,
+    transInput: { type: String,
         required: [true, "**Please enter the transaction"]
     },
     amount: { type: Number,

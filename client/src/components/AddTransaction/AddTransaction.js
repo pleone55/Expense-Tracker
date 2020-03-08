@@ -1,43 +1,37 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { navigate } from '@reach/router';
+import React, { useState, useContext } from 'react';
+import TransactionContext from '../../Context/Transaction/TransactionContext';
 
 import './Add.scss';
 
 const AddTransaction = () => {
-    const [transaction, setTransaction] = useState('');
+    const [transInput, setTransaction] = useState('');
     const [amount, setAmount] = useState(0);
-    const [errors, setErrors] = useState([]);
+
+    const transactionContext = useContext(TransactionContext);
+    const { addTransaction } = transactionContext;
 
     const onSubmitHandler = event => {
         event.preventDefault();
 
-        axios.post('http://localhost:7000/api/new/transaction', {
-            transaction,
-            amount
-        })
-            .then(response => console.log(response))
-            .then(() => navigate('/'))
-            .catch(err => {
-                const errResponse = err.response.data.errors;
-                const errorArr = [];
-                for(const key of Object.keys(errResponse)){
-                    errorArr.push(errResponse[key].message)
-                }
+        const newTransaction = {
+            transInput,
+            amount,
+        }
+        
+        addTransaction(newTransaction);
 
-                setErrors(errorArr);
-            });
-    }
+        setTransaction('');
+        setAmount(0);
+    };
 
     return (
         <h3>
             <form onSubmit={onSubmitHandler}>
-                <div className='errors'>{errors.map((err, i) => <p key={i}>{err}</p>)}</div>
                 <div className='form-control'>
-                    <label htmlFor='transaction'>Transaction Type</label>
+                    <label htmlFor='transInput'>Transaction Type</label>
                     <input 
                         type='text' 
-                        value={transaction} 
+                        value={transInput} 
                         onChange={event => {setTransaction(event.target.value)}}
                         placeholder="Enter Transaction" 
                     />
@@ -51,7 +45,7 @@ const AddTransaction = () => {
                         placeholder="Enter amount"
                     />
                 </div>
-                <button onClick={() => navigate('/')} className='btn'>Add Transaction</button>
+                <button className='btn'>Add Transaction</button>
             </form>
         </h3>
     )

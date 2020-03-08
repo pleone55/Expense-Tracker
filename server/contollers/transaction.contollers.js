@@ -1,13 +1,17 @@
 const { Transaction } = require('../models/transaction.models');
 
-module.exports.createTransaction = (req, res) => {
-    const { transaction, amount } = req.body;
-    Transaction.create({
-        transaction,
-        amount
-    })
-        .then(trans => res.json(trans))
-        .catch(err => res.status(400).json(err));
+module.exports.createTransaction =  async(req, res) => {
+    try {
+        const { transInput, amount } = req.body;
+        const transaction = await Transaction.create(req.body);
+    } catch (err) {
+        if(err.name === 'ValidationError') {
+            const messages = Object.values(err.errors).map(val => val.message);
+            return res.status(400).json({ error: messages });
+        } else {
+            return res.status(500).json({ error: 'Server Error'});
+        }
+    }
 }
 
 module.exports.getAllTransactions = (req, res) => {
