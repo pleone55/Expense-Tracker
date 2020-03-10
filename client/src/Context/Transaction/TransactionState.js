@@ -14,7 +14,7 @@ const TransactionState = props => {
     const initialState = {
         transaction: [],
         loading: true,
-        error: null
+        error: []
     }
 
     const [state, dispatch] = useReducer(TransactionReducer, initialState);
@@ -39,18 +39,23 @@ const TransactionState = props => {
         });
     };
 
-    const addTransaction = async(transaction) => {
+    const addTransaction = async(transaction, error) => {
         try {
-            const res = await axios.post('http://localhost:7000/api/new/transaction', transaction);
+            const res = await axios.post('http://localhost:7000/api/new/transaction', transaction, error);
 
             dispatch({
                 type: ADD_TRANSACTION,
                 payload: res.data
             });
         } catch(err) {
+            const errResponse = err.response.data.errors;
+            const errorArr = [];
+            for (const key of Object.keys(errResponse)){
+                errorArr.push(errResponse[key].message)
+            }
             dispatch({
                 type: ERROR,
-                payload: err.response.data.error
+                payload: errorArr
             });
         }
     }

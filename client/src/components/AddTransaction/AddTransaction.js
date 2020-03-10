@@ -8,7 +8,7 @@ const AddTransaction = () => {
     const [amount, setAmount] = useState(0);
 
     const transactionContext = useContext(TransactionContext);
-    const { addTransaction } = transactionContext;
+    const { addTransaction, error } = transactionContext;
 
     const onSubmitHandler = event => {
         event.preventDefault();
@@ -27,6 +27,7 @@ const AddTransaction = () => {
     return (
         <h3>
             <form onSubmit={onSubmitHandler}>
+                <div className='errors'>{error.map((err, i) => <p key={i}>{err}</p>)}</div>
                 <div className='form-control'>
                     <label htmlFor='transInput'>Transaction Type</label>
                     <input 
